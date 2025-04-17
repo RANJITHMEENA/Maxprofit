@@ -11,19 +11,22 @@ function calculateMaxProfit(time) {
     function trySequence(currentTime, sequence, totalEarnings) {
         if (currentTime > time) return;
         
-        // Update max earnings and sequences if current sequence is better
+        // Calculate property counts for this sequence
+        const counts = { T: 0, P: 0, C: 0 };
+        sequence.forEach(code => counts[code]++);
+        
+        // Update max earnings and best sequences
         if (totalEarnings > maxEarnings) {
             maxEarnings = totalEarnings;
-            bestSequences = [{...countProperties(sequence)}];
-        } else if (totalEarnings === maxEarnings && maxEarnings > 0) {
-            const newSequence = countProperties(sequence);
-            // Check if this sequence is already recorded
-            if (!bestSequences.some(s => 
-                s.T === newSequence.T && 
-                s.P === newSequence.P && 
-                s.C === newSequence.C) && 
-                bestSequences.length < 2) {
-                bestSequences.push(newSequence);
+            bestSequences = [{...counts}]; // Reset with new best sequence
+        } 
+        else if (totalEarnings === maxEarnings) {
+            // Only keep unique sequences, maximum of 2
+            const isUnique = !bestSequences.some(s => 
+                s.T === counts.T && s.P === counts.P && s.C === counts.C);
+            
+            if (isUnique && bestSequences.length < 2) {
+                bestSequences.push({...counts});
             }
         }
         
@@ -41,19 +44,11 @@ function calculateMaxProfit(time) {
         }
     }
     
-    // Helper function to count properties in a sequence
-    function countProperties(sequence) {
-        const counts = { T: 0, P: 0, C: 0 };
-        sequence.forEach(code => counts[code]++);
-        return counts;
-    }
-    
     // Start with empty sequence at time 0
     trySequence(0, [], 0);
     
-    // Format the output as requested
-    let output = `Earnings: $${maxEarnings}\n`;
-    output += `Solutions\n`;
+    // Format the output
+    let output = `Earnings: $${maxEarnings}\nSolutions\n`;
     
     bestSequences.forEach((seq, index) => {
         output += `${index + 1}. T: ${seq.T} P: ${seq.P} C: ${seq.C}\n`;
