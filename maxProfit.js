@@ -53,10 +53,12 @@ function calculateMaxProfit(time) {
     // Format the output as requested
     let output = `Earnings: $${maxEarnings}\n`;
     output += `Solutions\n`;
+    const topTwoSequences = bestSequences.slice(0, 2);
     
-    bestSequences.forEach((seq, index) => {
+    topTwoSequences.forEach((seq, index) => {
         output += `${index + 1}. T: ${seq.T} P: ${seq.P} C: ${seq.C}\n`;
     });
+    
     
     return output;
 }
