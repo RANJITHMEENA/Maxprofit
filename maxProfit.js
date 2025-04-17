@@ -21,7 +21,8 @@ function calculateMaxProfit(time) {
             if (!bestSequences.some(s => 
                 s.T === newSequence.T && 
                 s.P === newSequence.P && 
-                s.C === newSequence.C)) {
+                s.C === newSequence.C) && 
+                bestSequences.length < 2) {
                 bestSequences.push(newSequence);
             }
         }
@@ -53,9 +54,8 @@ function calculateMaxProfit(time) {
     // Format the output as requested
     let output = `Earnings: $${maxEarnings}\n`;
     output += `Solutions\n`;
-    const topTwoSequences = bestSequences.slice(0, 2);
     
-    topTwoSequences.forEach((seq, index) => {
+    bestSequences.forEach((seq, index) => {
         output += `${index + 1}. T: ${seq.T} P: ${seq.P} C: ${seq.C}\n`;
     });
     
